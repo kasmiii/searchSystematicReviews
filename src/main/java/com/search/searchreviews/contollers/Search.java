@@ -1,5 +1,6 @@
 package com.search.searchreviews.contollers;
 
+import com.search.searchreviews.entities.Searcher;
 import com.search.searchreviews.model.ResponseNormalSearch;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -7,12 +8,19 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
 @RestController
 @CrossOrigin(origins = "*")
 public class Search {
 
     private RestTemplate restTemplate;
+
+    @PersistenceContext
+    private EntityManager entityManager;
 
     public RestTemplate SpringbootConsumeRestExampleApplication() {
         return new RestTemplate();
@@ -46,4 +54,6 @@ public class Search {
         //System.out.println("total search results"+response.getBody().getSearch_info().getTotal_hits());
         return response.getBody();
     }
+
+
 }
