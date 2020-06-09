@@ -28,23 +28,21 @@ public class Search {
 
     @GetMapping(path = "/reviews")
     @ResponseBody
-    public ResponseNormalSearch reviewByTag(@RequestParam("keyword")String keyword,@RequestParam("group") String group,@RequestParam("year")int year){
+    public ResponseNormalSearch reviewByTag(@RequestParam("keyword")String keyword,@RequestParam("group") String group,@RequestParam("year")int year,@RequestParam("page")int page){
         restTemplate=SpringbootConsumeRestExampleApplication();
         HttpHeaders headers=new HttpHeaders();
         headers.set("Authorization","Token token=129c7c0036304e2b8c7b046200256dbd");
-        String url="https://api.epistemonikos.org/v1/documents/search?q="+keyword+"&classification=systematic-review&show=external_links";
-
+        String url="https://api.epistemonikos.org/v1/documents/search?q="+keyword+"&classification=systematic-review&show=external_links&p="+page;
+        System.out.println("la page recherche est :\t\t\t"+page);
         if(!group.equals("")){
             url+="&group="+group;
         }
         if(year!=0){
-            url+="year="+year;
+            url+="&year="+year;
         }
-
         HttpEntity entity=new HttpEntity(headers);
-
         ResponseEntity<ResponseNormalSearch> response=restTemplate.exchange(url, HttpMethod.GET, entity, ResponseNormalSearch.class);
-        //System.out.println("total search results"+response.getBody().getSearch_info().getTotal_hits());
+        System.out.println("total search results for page:"+page+"is:"+response.getBody());
         return response.getBody();
     }
 
