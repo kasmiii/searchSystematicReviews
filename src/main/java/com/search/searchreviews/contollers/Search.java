@@ -12,6 +12,8 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @CrossOrigin(origins = "*")
@@ -57,22 +59,31 @@ public class Search {
         headers.set("Authorization","Token token=129c7c0036304e2b8c7b046200256dbd");
         JSONObject personJsonObject = new JSONObject();
 
+        Map<String, String> map = new HashMap<>();
+        map.put("query", requestParam.getKeyword());
+        map.put("only_reviews", "true");
+        map.put("exclude_cochrane", requestParams.getExclude_cochrane());
+
         personJsonObject.put("query",requestParam.getKeyword());
-        personJsonObject.put("only_reviews",true);
+        personJsonObject.put("only_reviews","true");
+        personJsonObject.put("exclude_cochrane",requestParams.getExclude_cochrane());
 
         if(requestParam.getMin_year()!=0){
-            personJsonObject.put("min_year",requestParam.getMin_year());
+            personJsonObject.put("min_year",String.valueOf(requestParam.getMin_year()));
+            map.put("min_year",String.valueOf(requestParam.getMin_year()));
         }
         if(requestParam.getMax_year()!=0){
-            personJsonObject.put("max_year",requestParam.getMax_year());
+            personJsonObject.put("max_year",String.valueOf(requestParam.getMax_year()));
+            map.put("max_year",String.valueOf(requestParam.getMax_year()));
         }
 
-        HttpEntity<String> request =
-                new HttpEntity<String>(personJsonObject.toString(), headers);
+        System.out.println("l'objet parametre envoye est: "+personJsonObject);
+        //HttpEntity<Map<String,String>> entity =
+          //      new HttpEntity<String>(map, headers);//toString,,personJsonObject.toString()
 
-        //ResponseNormalSearch responseNormalSearch=restTemplate.postForObject(url,request,ResponseNormalSearch.class);
-        ResponseEntity<ResponseNormalSearch> responseNormalSearch=restTemplate.exchange(url, HttpMethod.POST, request, ResponseNormalSearch.class);
-        return responseNormalSearch.getBody();
+        HttpEntity<Map<String,String>> entity2=new HttpEntity<>(map,headers);
+        ResponseNormalSearch responseNormal=restTemplate.postForObject(url,entity2,ResponseNormalSearch.class);
+        return responseNormal;
     }
 
 }

@@ -5,6 +5,7 @@ public class RequestParams {
     public String keyword;
     public int min_year;
     public int max_year;
+    public  String exclude_cochrane;
 
     public RequestParams() {
     }
@@ -33,12 +34,21 @@ public class RequestParams {
         this.max_year = max_year;
     }
 
+    public String getExclude_cochrane() {
+        return exclude_cochrane;
+    }
+
+    public void setExclude_cochrane(String exclude_cochrane) {
+        this.exclude_cochrane = exclude_cochrane;
+    }
+
     @Override
     public String toString() {
         return "RequestParams{" +
                 "keyword='" + keyword + '\'' +
                 ", min_year=" + min_year +
                 ", max_year=" + max_year +
+                ",exclude_cochrane=" +exclude_cochrane+
                 '}';
     }
 }
